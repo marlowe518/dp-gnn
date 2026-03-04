@@ -24,6 +24,7 @@ from torch_geometric.data import Data
 
 from .config import Config
 from .data import load_dataset
+from .sampling import subsample_graph_pyg
 
 
 def add_reverse_edges(data: Data) -> Data:
@@ -133,7 +134,15 @@ def get_dataset(cfg: Config, rng: torch.Generator | None = None) -> Tuple[Data, 
     # Add reverse edges to mimic reference behavior.
     data = add_reverse_edges(data)
 
-    # TODO: integrate sampling/subsampling via `sampling` module (Alg. 1–3).
+    # Optional degree-bounded subsampling (Alg. 1–3) via sampling module.
+    max_degree = getattr(cfg, "max_degree", None)
+    if max_degree is not None and max_degree > 0 and hasattr(data, "train_nodes"):
+        data = subsample_graph_pyg(
+            data,
+            max_degree=max_degree,
+            train_nodes=data.train_nodes,
+            base_seed=getattr(cfg, "seed", 0),
+        )
 
     # Build masks dict.
     masks = compute_masks_for_splits(data)
