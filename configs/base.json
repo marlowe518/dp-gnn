@@ -1,6 +1,9 @@
 {
   "dataset": "ogbn-arxiv",
   "data_dir": "data",
+  "split_mode": "transductive",
+  "feature_norm": "none",
+  "adjacency_normalization": "inverse-degree",
   "num_layers": 2,
   "batch_size": 256,
   "num_neighbors": 10,

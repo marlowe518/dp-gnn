@@ -18,6 +18,9 @@ class Config:
     # Data
     dataset: str = "ogbn-arxiv"
     data_dir: str = "data"
+    split_mode: str = "transductive"  # "transductive" | "disjoint"
+    feature_norm: str = "none"  # "none" | "standard"
+    adjacency_normalization: str = "inverse-degree"  # "none" | "inverse-degree" | "inverse-sqrt-degree"
     # Sampling (Alg. 1–3 placeholders)
     num_layers: int = 2
     batch_size: int = 256
@@ -57,7 +60,18 @@ class Config:
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
 
-    def merge_cli(self, workdir: str | None = None, debug: bool | None = None, dry_run: bool | None = None) -> None:
+    def merge_cli(
+        self,
+        workdir: str | None = None,
+        debug: bool | None = None,
+        dry_run: bool | None = None,
+        dataset: str | None = None,
+        data_root: str | None = None,
+        split_mode: str | None = None,
+        seed: int | None = None,
+        feature_norm: str | None = None,
+        adjacency_normalization: str | None = None,
+    ) -> None:
         """Update config from CLI flags (in-place)."""
         if workdir is not None:
             self.workdir = workdir
@@ -65,3 +79,15 @@ class Config:
             self.debug = debug
         if dry_run is not None:
             self.dry_run = dry_run
+        if dataset is not None:
+            self.dataset = dataset
+        if data_root is not None:
+            self.data_dir = data_root
+        if split_mode is not None:
+            self.split_mode = split_mode
+        if seed is not None:
+            self.seed = seed
+        if feature_norm is not None:
+            self.feature_norm = feature_norm
+        if adjacency_normalization is not None:
+            self.adjacency_normalization = adjacency_normalization

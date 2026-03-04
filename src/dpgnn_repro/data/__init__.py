@@ -1,8 +1,6 @@
-"""Dataset loader stubs. No real download or processing yet.
+"""Dataset loader and download. Matches reference repo data loading and download layout."""
 
-Target: reference repo data loading (e.g. ogbn-arxiv). Paper: dataset setup as described.
-"""
+from .download_dataset import ensure_ogbn_arxiv
+from .loader import load_dataset, log_data_debug
 
-from .loader import load_dataset
-
-__all__ = ["load_dataset"]
+__all__ = ["load_dataset", "log_data_debug", "ensure_ogbn_arxiv"]
