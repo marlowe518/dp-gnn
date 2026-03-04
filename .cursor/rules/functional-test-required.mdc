@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+
+After implementing any functionality (function, method, class, or module),
+you MUST provide an independent functional test script.
+
+Requirements:
+
+1. The test must be a standalone Python script placed under:
+   tests/functional/
+
+2. The test script must:
+   - construct minimal example inputs
+   - call the implemented functionality
+   - verify expected outputs or invariants
+   - print debug summaries of key results
+
+3. The test must be runnable directly via:
+
+   python tests/functional/<test_name>.py
+
+4. The test must not rely on heavy datasets or long training.
+   Use small synthetic inputs unless explicitly testing dataset loading.
+
+5. The test should check:
+   - output shapes
+   - correctness of key properties
+   - deterministic behavior when a seed is fixed
+
+6. If randomness is involved, the test must demonstrate:
+   - deterministic output with the same seed
+   - variability with different seeds.
+
+7. Provide instructions on how to run the test.
