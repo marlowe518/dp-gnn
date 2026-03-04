@@ -1,8 +1,10 @@
-"""Subgraph extraction placeholders.
+"""Subgraph utilities.
 
-No implementation yet. Target: reference repo subgraph construction. Paper: subgraph used in Alg.
+Includes:
+- `extract_subgraph`: batch-level subgraph extraction (placeholder).
+- `get_subgraphs`: padded per-node subgraph indices (reference train.get_subgraphs).
 """
 
-from .extract import extract_subgraph
+from .extract import extract_subgraph, get_subgraphs
 
-__all__ = ["extract_subgraph"]
+__all__ = ["extract_subgraph", "get_subgraphs"]
