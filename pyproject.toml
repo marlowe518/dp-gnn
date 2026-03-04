@@ -14,6 +14,8 @@ dependencies = [
     # torch-geometric; may require wheels per CUDA (see PyG install docs)
     "torch-geometric>=2.4.0,<2.6",
     "numpy>=1.24,<2",
+    "scipy>=1.10",
+    "dp-accounting>=0.4",
 ]
 
 [project.optional-dependencies]

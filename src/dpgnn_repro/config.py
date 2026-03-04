@@ -21,21 +21,44 @@ class Config:
     split_mode: str = "transductive"  # "transductive" | "disjoint"
     feature_norm: str = "none"  # "none" | "standard"
     adjacency_normalization: str = "inverse-degree"  # "none" | "inverse-degree" | "inverse-sqrt-degree"
-    # Sampling (Alg. 1–3 placeholders)
+    # Model
+    model: str = "gcn"  # "mlp" | "gcn"
+    latent_size: int = 100
     num_layers: int = 2
+    num_encoder_layers: int = 1
+    num_message_passing_steps: int = 1
+    num_decoder_layers: int = 1
+    activation_fn: str = "tanh"
+    num_classes: int = 40  # set from data if not in JSON
+    # Sampling / subgraphs
     batch_size: int = 256
     num_neighbors: int = 10
-    # DP (placeholder)
+    pad_subgraphs_to: int = 100
+    max_degree: int = 5
+    # DP
     clip_norm: float = 1.0
     noise_multiplier: float = 0.1
+    differentially_private_training: bool = True
+    l2_norm_clip_percentile: float = 75.0
+    num_estimation_samples: int = 10000
+    training_noise_multiplier: float = 2.0
+    max_training_epsilon: float | None = None
+    clip_norm_scale: float = 1.0
     # Training
     epochs: int = 100
     lr: float = 1e-3
+    learning_rate: float = 3e-3
     optimizer: str = "adam"
-    # Privacy accounting (placeholder)
+    momentum: float = 0.0
+    nesterov: bool = False
+    num_training_steps: int = 3000
+    evaluate_every_steps: int = 50
+    checkpoint_every_steps: int = 50
+    # Privacy accounting
     target_delta: float = 1e-5
     # Run
     seed: int = 42
+    rng_seed: int = 0
     workdir: str = "outputs/dev"
     debug: bool = False
     dry_run: bool = False

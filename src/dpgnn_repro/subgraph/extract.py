@@ -133,12 +133,12 @@ def make_subgraph_from_indices(
         torch.full_like(subgraph_indices, padding_node),
     )
 
-    # Remap indices to within the subgraph: star graph from root (0).
+    # Star: edges neighbors -> root so root aggregates (reference swaps in conv; we build directly).
     length = idx_clipped.numel()
-    senders = torch.zeros(length, dtype=torch.int32, device=device)
-    receivers = torch.arange(length, dtype=torch.int32, device=device)
+    senders = torch.arange(length, dtype=torch.int32, device=device)
+    receivers = torch.zeros(length, dtype=torch.int32, device=device)
 
-    # Handle padding: edges for invalid positions point to/from dummy.
+    # Padding: invalid positions -> dummy node.
     senders = torch.where(
         valid_mask.to(torch.bool),
         senders,
@@ -150,10 +150,9 @@ def make_subgraph_from_indices(
         torch.full_like(receivers, padding_node, dtype=torch.int32),
     )
 
-    # Add reverse edges, ignoring self-loops (skip index 0).
     if add_reverse_edges:
-        rev_senders = receivers[1:]
-        rev_receivers = senders[1:]
+        rev_senders = receivers.clone()
+        rev_receivers = senders.clone()
         senders = torch.cat([senders, rev_senders], dim=0)
         receivers = torch.cat([receivers, rev_receivers], dim=0)
 
