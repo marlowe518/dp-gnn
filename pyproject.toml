@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dpgnn-repro"
+version = "0.1.0"
+description = "Skeleton for reproducing Differentially Private GNNs (google-research/differentially_private_gnns)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "torch==2.2.0",
+    # torch-geometric; may require wheels per CUDA (see PyG install docs)
+    "torch-geometric>=2.4.0,<2.6",
+    "numpy>=1.24,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+dpgnn-repro = "dpgnn_repro.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

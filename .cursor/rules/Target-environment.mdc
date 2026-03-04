@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+Please follow ENVIRONMENT.md strictly. Do not add dependencies unless necessary.

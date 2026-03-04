@@ -1,0 +1,17 @@
+{
+  "dataset": "ogbn-arxiv",
+  "data_dir": "data",
+  "num_layers": 2,
+  "batch_size": 512,
+  "num_neighbors": 10,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.5,
+  "epochs": 200,
+  "lr": 0.003,
+  "optimizer": "adam",
+  "target_delta": 1e-5,
+  "seed": 42,
+  "workdir": "outputs/ogbn_arxiv_dp_gcn_adam",
+  "debug": false,
+  "dry_run": false
+}
