@@ -1,0 +1,21 @@
+---
+description: 
+alwaysApply: true
+---
+
+This repository reproduces the project:
+
+google-research/differentially_private_gnns
+https://github.com/google-research/google-research/tree/master/differentially_private_gnns
+
+The reference repository is located at:
+reference_repo/differentially_private_gnns
+
+Paper:
+Node-Level Differentially Private Graph Neural Networks
+https://arxiv.org/abs/2111.15521
+
+When implementing functionality:
+- match the behavior of the reference implementation
+- avoid redesigning algorithms
+- focus on reproducibility
