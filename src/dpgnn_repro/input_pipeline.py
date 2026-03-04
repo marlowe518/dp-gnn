@@ -25,6 +25,7 @@ from torch_geometric.data import Data
 from .config import Config
 from .data import load_dataset
 from .sampling import subsample_graph_pyg
+from .adjacency import compute_edge_weight
 
 
 def add_reverse_edges(data: Data) -> Data:
@@ -70,46 +71,6 @@ def compute_masks_for_splits(data: Data) -> Dict[str, torch.Tensor]:
     return {"train": train_mask, "validation": val_mask, "test": test_mask}
 
 
-def _compute_edge_weight(
-    data: Data,
-    adjacency_normalization: str | None,
-) -> torch.Tensor:
-    """Compute edge weights analogous to normalizations.normalize_edges_with_mask.
-
-    This mirrors the reference behavior for:
-      - None / \"none\"            → all-ones edge weights
-      - \"inverse-degree\"         → D^{-1} A
-      - \"inverse-sqrt-degree\"    → D^{-1/2} A D^{-1/2}
-    """
-    edge_index = data.edge_index
-    senders = edge_index[0]
-    receivers = edge_index[1]
-
-    num_nodes = data.num_nodes if hasattr(data, "num_nodes") else data.x.size(0)
-    num_edges = senders.size(0)
-
-    if adjacency_normalization is None or adjacency_normalization == "none":
-        return torch.ones(num_edges, dtype=torch.float32, device=edge_index.device)
-
-    # Degrees based on all edges (mask=None in reference).
-    out_deg = torch.bincount(senders, minlength=num_nodes).to(torch.float32)
-    in_deg = torch.bincount(receivers, minlength=num_nodes).to(torch.float32)
-
-    if adjacency_normalization == "inverse-degree":
-        out_deg = torch.clamp(out_deg, min=1.0)
-        coeff = 1.0 / out_deg
-        return coeff[senders]
-
-    if adjacency_normalization == "inverse-sqrt-degree":
-        out_deg = torch.clamp(out_deg, min=1.0)
-        in_deg = torch.clamp(in_deg, min=1.0)
-        coeff_out = 1.0 / torch.sqrt(out_deg)
-        coeff_in = 1.0 / torch.sqrt(in_deg)
-        return coeff_out[senders] * coeff_in[receivers]
-
-    raise ValueError(f"Unknown adjacency_normalization: {adjacency_normalization}")
-
-
 def get_dataset(cfg: Config, rng: torch.Generator | None = None) -> Tuple[Data, torch.Tensor, Dict[str, torch.Tensor]]:
     """Load graph dataset and apply basic preprocessing.
 
@@ -151,7 +112,12 @@ def get_dataset(cfg: Config, rng: torch.Generator | None = None) -> Tuple[Data, 
     data = add_self_loops(data)
 
     # Compute edge weights analogous to reference normalization step.
-    data.edge_weight = _compute_edge_weight(data, getattr(cfg, "adjacency_normalization", None))
+    num_nodes = data.num_nodes if hasattr(data, "num_nodes") else data.x.size(0)
+    data.edge_weight = compute_edge_weight(
+        data.edge_index,
+        num_nodes=num_nodes,
+        mode=getattr(cfg, "adjacency_normalization", None),
+    )
 
     labels = data.y
     return data, labels, masks
