@@ -11,6 +11,9 @@ python -m pip install -U pip setuptools wheel
 # 2. Scientific stack + utilities (numpy, scipy, pandas, scikit-learn, tqdm, pyyaml, matplotlib)
 pip install numpy scipy pandas scikit-learn tqdm pyyaml matplotlib
 
+# 2b. Privacy accounting (RDP; reference repo privacy_accountants.py)
+pip install "dp-accounting>=0.5,<0.7"
+
 # 3. PyTorch Geometric core (torch is already in base image; do not reinstall)
 pip install torch-geometric==2.5.3
 
