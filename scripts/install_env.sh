@@ -20,3 +20,6 @@ pip install torch-geometric==2.5.3
 # 4. PyG operators: must match torch 2.2.0 + CUDA 12.1 (install from official wheel index)
 pip install pyg-lib torch-scatter torch-sparse torch-cluster torch-spline-conv \
   -f https://data.pyg.org/whl/torch-2.2.0+cu121.html
+
+# 5. Install pytest
+pip install pytest
